@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Cost Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Health Cost Prediction</h1>
+        <div class="tabs">
+            <button class="tablink" onclick="openTab(event, 'fillDetails')">Fill Details Manually</button>
+            <button class="tablink" onclick="openTab(event, 'uploadPrescription')">Upload Prescription</button>
+        </div>
+
+        <!-- Fill Details Manually Section -->
+        <div id="fillDetails" class="tabcontent">
+            <form action="/predict" method="POST" onsubmit="showLoader()">
+                <h2>Fill Details Manually</h2>
+
+                <!-- Collecting 20 different attributes -->
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="bmi">BMI:</label>
+                <input type="number" id="bmi" name="bmi" required>
+
+                <label for="smoker">Smoker:</label>
+                <select id="smoker" name="smoker" required>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+
+                <label for="diabetes">Diabetes:</label>
+                <select id="diabetes" name="diabetes" required>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+
+                <label for="hypertension">Hypertension:</label>
+                <select id="hypertension" name="hypertension" required>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+
+                <label for="family_history">Family History:</label>
+                <input type="text" id="family_history" name="family_history" required>
+
+                <label for="systolic_bp">Systolic BP:</label>
+                <input type="number" id="systolic_bp" name="systolic_bp" required>
+
+                <label for="diastolic_bp">Diastolic BP:</label>
+                <input type="number" id="diastolic_bp" name="diastolic_bp" required>
+
+                <label for="cholesterol_level">Cholesterol Level:</label>
+                <input type="number" id="cholesterol_level" name="cholesterol_level" required>
+
+                <label for="physical_activity_level">Physical Activity Level:</label>
+                <input type="text" id="physical_activity_level" name="physical_activity_level" required>
+
+                <label for="diet_score">Diet Score:</label>
+                <input type="number" id="diet_score" name="diet_score" required>
+
+                <label for="alcohol_consumption">Alcohol Consumption:</label>
+                <select id="alcohol_consumption" name="alcohol_consumption" required>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+
+                <label for="daily_sugar_intake">Daily Sugar Intake:</label>
+                <input type="number" id="daily_sugar_intake" name="daily_sugar_intake" required>
+
+                <label for="exercise_frequency">Exercise Frequency:</label>
+                <input type="text" id="exercise_frequency" name="exercise_frequency" required>
+
+                <label for="sleep_hours">Sleep Hours:</label>
+                <input type="number" id="sleep_hours" name="sleep_hours" required>
+
+                <label for="medical_expenses_last_year">Medical Expenses Last Year:</label>
+                <input type="number" id="medical_expenses_last_year" name="medical_expenses_last_year" required>
+
+                <label for="hospital_visits_last_year">Hospital Visits Last Year:</label>
+                <input type="number" id="hospital_visits_last_year" name="hospital_visits_last_year" required>
+
+                <label for="medication_usage">Medication Usage:</label>
+                <input type="text" id="medication_usage" name="medication_usage" required>
+
+                <label for="region">Region:</label>
+                <input type="text" id="region" name="region" required>
+
+                <button type="submit" name="submit_manual">Predict Cost</button>
+            </form>
+        </div>
+
+        <!-- Upload Prescription Section -->
+        <div id="uploadPrescription" class="tabcontent">
+            <form action="/predict" method="POST" enctype="multipart/form-data" onsubmit="showLoader()">
+                <h2>Upload Prescription</h2>
+                <input type="file" name="prescription" required>
+                <button type="submit" name="submit_prescription">Predict Cost</button>
+            </form>
+        </div>
+
+        <!-- Displaying Prediction Result -->
+        {% if predicted_cost %}
+            <div class="result">
+                <h3>Predicted Cost: ₹{{ predicted_cost }}</h3>
+            </div>
+        {% elif error_message %}
+            <div class="error">
+                <h3>{{ error_message }}</h3>
+            </div>
+        {% elif message %}
+            <div class="success">
+                <h3>{{ message }}</h3>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Loader Overlay -->
+    <div id="loader-overlay" class="loader-overlay">
+        <div id="predicting-message">Predicting...</div>
+    </div>
+</body>
+</html>
